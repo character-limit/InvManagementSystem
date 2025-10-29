@@ -15,7 +15,7 @@ class Item:
         return f"Item(name={self.name}, quantity={self.quantity}, location={self.location}, lastModifiedUID={self.lastModifiedUID}, lastModifiedDate={self.lastModifiedDate})"
     
     @classmethod
-    def load_objects(cls):
+    def load_items(cls):
         items = [] #init return
 
         if not os.path.exists(CSV_PATH):
@@ -32,7 +32,7 @@ class Item:
         return items
     
     @classmethod
-    def write_objects(cls, items):
+    def write_items(cls, items):
         if not os.path.exists(CSV_PATH):
             print("no .csv found, check dir")
             return items # catch if no file.

@@ -1,11 +1,12 @@
 import csv, os
 from datetime import datetime
 from item import Item
+from user import User
 
 print("hello")
 
 def main():
-    items = Item.load_objects()
+    items = Item.load_items()
 
     for i in items:
         print(i)
@@ -15,9 +16,25 @@ def main():
 
     items.append(temp)
 
-    Item.write_objects(items)
+    Item.write_items(items)
 
     for i in items:
+        print(i)
+
+
+    users = User.load_users()
+
+    for i in users:
+        print(i)
+
+
+    temp = User("first", "last", "username", "password", "UID")
+
+    users.append(temp)
+
+    User.write_users(users)
+
+    for i in users:
         print(i)
 
 
