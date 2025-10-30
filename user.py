@@ -46,6 +46,18 @@ class User:
                 writer.writerow({"firstName":item.firstName, "lastName":item.lastName, "username":item.username, "password":item.password, "UID":item.UID})
         print("write success")
 
+    @classmethod
+    def gen_UID(cls):
+        users = cls.load_users()
+
+        if not users:
+            return "0001" #catch empty list
+        
+        temp = int(users[-1].UID) +1 #get last uid +=1
+        uid = str(temp).zfill(4) #convert int to str with leading 0 for storage
+
+        return uid
+        
     def append_user(self):
         if not os.path.exists(CSV_PATH):
             print("no .csv found, check dir")
@@ -57,15 +69,22 @@ class User:
             writer.writerow({"firstName":self.firstName, "lastName":self.lastName, "username":self.username, "password":self.password, "UID":self.UID})
         
     def create_user(self, firstName, lastName, username, plainTextPassword):
+        
         self.firstName = firstName
         self.lastName = lastName
         self.username = username
         self.password = self.password_encrypt(plainTextPassword)
-        self.UID = 0 #needs a func to gen unique ID
+        self.UID = self.genUID()
 
+        self.append_user(self)
+
+    @staticmethod
     def password_encrypt(password):
         print("")
 
+    @staticmethod
     def password_decrypt(password):
         print("")
+
+    
         
