@@ -72,21 +72,16 @@ class User:
         
         User.load_users() #refresh users list
 
-    def create_user(self, firstName, lastName, username, plainTextPassword):
+    def create_user(firstName, lastName, username, plainTextPassword):
 
-        self.firstName = firstName
-        self.lastName = lastName
-        self.username = username
-        self.password = self.password_encrypt(plainTextPassword)
-        self.UID = User.gen_UID()
+        self = User(firstName, lastName, username, User.password_encrypt(plainTextPassword), User.gen_UID())
 
         self.append_user()
 
     @staticmethod
     def password_encrypt(password):
 
-        return bcrypt.hashpw(password,bcrypt.gensalt())
-
+        return bcrypt.hashpw(password.encode("utf-8"),bcrypt.gensalt())
 
     @staticmethod
     def password_check(entered, password):

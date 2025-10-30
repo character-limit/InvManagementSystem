@@ -6,7 +6,7 @@ from user import User
 print("hello")
 
 def main():
-    items = Item.load_items()
+    """ items = Item.load_items()
 
     for i in items:
         print(i)
@@ -19,24 +19,19 @@ def main():
     Item.write_items(items)
 
     for i in items:
-        print(i)
+        print(i) """
 
 
-    users = User.load_users()
+    User.load_users()
 
-    for i in users:
-        print(i)
+    print(User.users)
 
-
-    temp = User("first", "last", "username", "password", "UID")
-
-    users.append(temp)
-
-    User.write_users(users)
-
-    for i in users:
-        print(i)
-
+    User.create_user(
+        input ("first Name: "),
+        input ("last Name: "),
+        input ("user Name: "),
+        input ("password: ")
+    )
 
 if __name__ == "__main__":
     main()
