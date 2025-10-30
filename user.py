@@ -45,3 +45,27 @@ class User:
             for item in users:
                 writer.writerow({"firstName":item.firstName, "lastName":item.lastName, "username":item.username, "password":item.password, "UID":item.UID})
         print("write success")
+
+    def append_user(self):
+        if not os.path.exists(CSV_PATH):
+            print("no .csv found, check dir")
+            return 
+        
+        with open(CSV_PATH, mode="a", newline="") as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=COLUMNS)
+
+            writer.writerow({"firstName":self.firstName, "lastName":self.lastName, "username":self.username, "password":self.password, "UID":self.UID})
+        
+    def create_user(self, firstName, lastName, username, plainTextPassword):
+        self.firstName = firstName
+        self.lastName = lastName
+        self.username = username
+        self.password = self.password_encrypt(plainTextPassword)
+        self.UID = 0 #needs a func to gen unique ID
+
+    def password_encrypt(password):
+        print("")
+
+    def password_decrypt(password):
+        print("")
+        
