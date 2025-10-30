@@ -103,3 +103,12 @@ class User:
                     print("incorrect password")
 
         print("username not found")
+
+    @staticmethod
+    def find_user(UID):
+        User.load_users()
+
+        for user in User.users:
+            if user.UID == UID:
+                return user
+        return None
