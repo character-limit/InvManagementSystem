@@ -1,4 +1,4 @@
-import csv, os
+import csv, os, bcrypt
 
 CSV_PATH = "users.csv"
 COLUMNS = ["firstName", "lastName", "username", "password", "UID"] # fields for item obj in csv file
@@ -84,11 +84,13 @@ class User:
 
     @staticmethod
     def password_encrypt(password):
-        print("")
+
+        return bcrypt.hashpw(password,bcrypt.gensalt())
+
 
     @staticmethod
-    def password_decrypt(password):
-        print("")
-
-    
-        
+    def password_check(entered, password):
+        if bcrypt.checkpw(entered, password):
+            return True
+        else:
+            return False
