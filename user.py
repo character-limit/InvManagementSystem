@@ -99,10 +99,7 @@ class User:
                 if User.password_check(password, user.password):
                     print("login success")
                     User.current = user
-                    return 1 #login success
-                else:
-                    return 2 #wrong password    
-        return 3 #user not found
+                    return True
 
     @staticmethod
     def find_user(UID):

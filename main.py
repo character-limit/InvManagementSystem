@@ -67,14 +67,10 @@ def login_page():
 
     
 
-    if User.login(username, password) == 1:
+    if User.login(username, password) == True:
         menu_page()
-    elif 2:
-        print("Incorrect password. Please try again.")
-        input("Press Enter to continue...")
-        login_page()
-    elif 3:
-        print("Username not found. Please try again.")
+    else:
+        print("Incorrect login. Please try again.")
         input("Press Enter to continue...")
         login_page()
 
@@ -89,6 +85,28 @@ def create_user_page(): ##ADD VALIDATION!!
     User.create_user(firstName, lastName, username, password)
     title_page()
 
+def menu_page():
+    os.system('cls' if os.name == 'nt' else 'clear')
+    print(f"=== Main Menu ({User.current.username}) ===")
+    print("1: View Inventory")
+    print("2: Logout")
+    choice = input("Select an option: ")
+
+    if choice == "1":
+        inventory_page()
+    elif choice == "2":
+        User.current = None #log out
+        title_page()
+    else:
+        menu_page()
+
+def inventory_page():
+    os.system('cls' if os.name == 'nt' else 'clear')
+    print("=== Inventory ===")
+    items = Item.load_items()
+
+    for item in items:
+        print(item)
 
 if __name__ == "__main__":
     title_page()
