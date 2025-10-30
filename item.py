@@ -35,7 +35,7 @@ class Item:
     def write_items(cls, items):
         if not os.path.exists(CSV_PATH):
             print("no .csv found, check dir")
-            return items # catch if no file.
+            return
 
         with open(CSV_PATH, mode = "w", newline = "") as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=COLUMNS)
@@ -43,4 +43,3 @@ class Item:
 
             for item in items:
                 writer.writerow({"name":item.name, "quantity":item.quantity, "location":item.location, "lastModifiedUID":item.lastModifiedUID, "lastModifiedDate":item.lastModifiedDate})
-        print("write success")
