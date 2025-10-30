@@ -93,28 +93,47 @@ def menu_page():
     choice = input("Select an option: ")
 
     if choice == "1":
-        inventory_page()
+        inventory_page(1)
     elif choice == "2":
         User.current = None #log out
         title_page()
     else:
         menu_page()
 
-def inventory_page():
+def inventory_page(page):
+    items = Item.load_items()   #reload items 
     os.system('cls' if os.name == 'nt' else 'clear')
     print("=== Inventory ===\n\n")
-    items = Item.load_items()
 
     # display in table.
+    print_table(page, items)
 
-    print(f'{"Name":<40} {"Quantity":<15} {"Location":<25} {"Last Modified By":<25} {"Last Modified ":<25}')
-    print("-"*130)
-    for i in items[0:15]:
+    choice = input("\n 1: Back to Menu   2: Next Page   3: Previous Page   4: Search   5: Edit Table\nOption: ")
+
+    if choice == "1":
+        menu_page()
+    elif choice == "2":
+        inventory_page(page+1 if (page*15)<len(Item.load_items()) else page, items)
+    elif choice == "3":
+        inventory_page(page-1 if page >1 else 1, items)
+    elif choice == "4":
+        print("")
+    elif choice == "5":
+        print("")
+    else:
+        inventory_page(page, items)
+
+def print_table(page, items):
+
+    lb = ((page)*15)-15 #get lower bound for items to display on page
+    ub = lb +15         #get upper bound for items to display on page
+
+    print(f'{"Name":<40} {"Quantity":<15} {"Location":<25} {"Last Modified By":<25} {"Last Modified ":<25}')#header
+    print("-"*130)#separator
+    for i in items[lb:ub]:  #slice items according to above
         print(f"{i.name:<40} {i.quantity:<15} {i.location:<25} {User.find_user(i.lastModifiedUID).firstName:<25} {i.lastModifiedDate:<25}")
 
-    print(f"[Page: 1 of {((len(items)-1)//15)+1}]")
-
-    input("\n 1: Back to Menu   2: Next Page   3: Previous Page   4: Search   5: Edit Item\nOption: ")
+    print(f"[Page: {page} of {((len(items)-1)//15)+1}]")
 
 if __name__ == "__main__":
     title_page()
