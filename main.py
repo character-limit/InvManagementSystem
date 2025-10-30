@@ -113,15 +113,15 @@ def inventory_page(page):
     if choice == "1":
         menu_page()
     elif choice == "2":
-        inventory_page(page+1 if (page*15)<len(Item.load_items()) else page, items)
+        inventory_page(page+1 if (page*15)<len(items) else page)
     elif choice == "3":
-        inventory_page(page-1 if page >1 else 1, items)
+        inventory_page(page-1 if page >1 else 1)
     elif choice == "4":
-        print("")
+        inventory_search(1) #default page to 1
     elif choice == "5":
         print("")
     else:
-        inventory_page(page, items)
+        inventory_page(page)
 
 def print_table(page, items):
 
@@ -134,6 +134,36 @@ def print_table(page, items):
         print(f"{i.name:<40} {i.quantity:<15} {i.location:<25} {User.find_user(i.lastModifiedUID).firstName:<25} {i.lastModifiedDate:<25}")
 
     print(f"[Page: {page} of {((len(items)-1)//15)+1}]")
+
+def inventory_search(page):
+    os.system('cls' if os.name == 'nt' else 'clear')
+    print("=== Inventory Search ===\n")
+    query = input("Enter search term: ").lower() #case insensitive
+
+    items = Item.load_items()
+    results = [item for item in items if query in item.name.lower() or query in item.location.lower()] #check against name and loci
+
+    os.system('cls' if os.name == 'nt' else 'clear')
+    print(f"=== Search: '{query}' ===\n")
+
+    if results:
+        print_table(page, results)
+
+        choice = input("\n 1: Back to Inventory   2: Next Page   3: Previous Page   4: Edit Search\nOption: ")
+
+        if choice == "1":
+            inventory_page(1)
+        elif choice == "2":
+            print_table((page+1 if (page*15)<len(results) else page), results)
+        elif choice == "3":
+            print_table((page-1 if page >1 else 1), results)
+        elif choice == "4":
+            inventory_search(1) 
+    else:
+        print("No items found matching your search.")
+
+    input("\nPress Enter to return to Inventory...")
+    inventory_page(1)
 
 if __name__ == "__main__":
     title_page()
