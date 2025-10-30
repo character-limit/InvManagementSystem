@@ -117,9 +117,9 @@ def inventory_page(page):
     elif choice == "3":
         inventory_page(page-1 if page >1 else 1)
     elif choice == "4":
-        inventory_search(1) #default page to 1
+        inventory_search_page(1) #default page to 1
     elif choice == "5":
-        print("")
+        edit_table_page()
     else:
         inventory_page(page)
 
@@ -135,7 +135,7 @@ def print_table(page, items):
 
     print(f"[Page: {page} of {((len(items)-1)//15)+1}]")
 
-def inventory_search(page):
+def inventory_search_page(page):
     os.system('cls' if os.name == 'nt' else 'clear')
     print("=== Inventory Search ===\n")
     query = input("Enter search term: ").lower() #case insensitive
@@ -164,12 +164,69 @@ def inventory_search(page):
             print_table((page-1 if page >1 else 1), results)
             choice = input("\n 1: Back to Inventory   2: Next Page   3: Previous Page   4: Edit Search\nOption: ")
         elif choice == "4":
-            inventory_search(1) 
+            inventory_search_page(1) 
     else:
         print("No items found matching your search.")
 
     input("\nPress Enter to return to Inventory...")
     inventory_page(1)
+
+def edit_table_page():
+    os.system('cls' if os.name == 'nt' else 'clear')
+    print("=== Edit Inventory Logs ===\n")
+
+    choice = input("1: Add Item   \n2: Remove Item   \n3: Edit Item   \n4: Back to Inventory\n\nOption: ")
+
+    if choice == "1":
+        add_item_page()
+    elif choice == "2":
+        remove_item_page()
+    elif choice == "3":
+        edit_item_page()
+    elif choice == "4":
+        inventory_page(1)
+    else:
+        edit_table_page()
+
+def add_item_page():
+    print("=== Add Item ===\n")
+
+def remove_item_page():
+    os.system('cls' if os.name == 'nt' else 'clear')
+    print("=== Remove Item ===\n")
+
+    #search for items with name 
+
+    query = input("\n\nSearch for item name: ").lower() #case insensitive
+
+    items = Item.load_items()
+    results = [item for item in items if query in item.name.lower() or query in item.location.lower()] #check against name and loci
+
+    item_selector(results)
+    #select from results using item selector
+
+def edit_item_page():
+    print("=== Edit Item ===\n")
+
+def item_selector(items):
+    os.system('cls' if os.name == 'nt' else 'clear')
+    print("=== Select Item ===\n")
+
+    print(f'       {"Name":<40} {"Quantity":<15} {"Location":<25} {"Last Modified By":<25} {"Last Modified ":<25}')#header
+    print("-"*130)#separator
+    j = 0
+    for i in items:
+        print(f"[{j}]   {i.name:<40} {i.quantity:<15} {i.location:<25} {User.find_user(i.lastModifiedUID).firstName:<25} {i.lastModifiedDate:<25}")
+        j += 1
+
+    choice = input("\nSelect item by number (b to go back): ")
+
+    if choice == 'b':
+        return
+
+    selected_item = items[int(choice)]
+    print(f"Selected item: {selected_item}")
+
 
 if __name__ == "__main__":
     title_page()
