@@ -102,11 +102,19 @@ def menu_page():
 
 def inventory_page():
     os.system('cls' if os.name == 'nt' else 'clear')
-    print("=== Inventory ===")
+    print("=== Inventory ===\n\n")
     items = Item.load_items()
 
-    for item in items:
-        print(item)
+    # display in table.
+
+    print(f'{"Name":<40} {"Quantity":<15} {"Location":<25} {"Last Modified By":<25} {"Last Modified ":<25}')
+    print("-"*130)
+    for i in items[0:15]:
+        print(f"{i.name:<40} {i.quantity:<15} {i.location:<25} {User.find_user(i.lastModifiedUID).firstName:<25} {i.lastModifiedDate:<25}")
+
+    print(f"[Page: 1 of {((len(items)-1)//15)+1}]")
+
+    input("\n 1: Back to Menu   2: Next Page   3: Previous Page   4: Search   5: Edit Item\nOption: ")
 
 if __name__ == "__main__":
     title_page()
