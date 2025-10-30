@@ -154,9 +154,15 @@ def inventory_search(page):
         if choice == "1":
             inventory_page(1)
         elif choice == "2":
+            os.system('cls' if os.name == 'nt' else 'clear')
+            print(f"=== Search: '{query}' ===\n")
             print_table((page+1 if (page*15)<len(results) else page), results)
+            choice = input("\n 1: Back to Inventory   2: Next Page   3: Previous Page   4: Edit Search\nOption: ")
         elif choice == "3":
+            os.system('cls' if os.name == 'nt' else 'clear')
+            print(f"=== Search: '{query}' ===\n")
             print_table((page-1 if page >1 else 1), results)
+            choice = input("\n 1: Back to Inventory   2: Next Page   3: Previous Page   4: Edit Search\nOption: ")
         elif choice == "4":
             inventory_search(1) 
     else:
