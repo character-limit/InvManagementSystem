@@ -6,6 +6,7 @@ COLUMNS = ["firstName", "lastName", "username", "password", "UID"] # fields for 
 class User:
 
     users = [] #list of all user accs
+    current = None
 
     def __init__(self, firstName, lastName, username, password, UID):
         self.firstName = firstName
@@ -59,8 +60,13 @@ class User:
         uid = str(temp).zfill(4) #convert int to str with leading 0 for storage
 
         return uid
-        
-    def append_user(self):
+    
+    @classmethod
+    def create_user(cls, firstName, lastName, username, plainTextPassword):
+        cls.append_user(User(firstName, lastName, username, User.password_encrypt(plainTextPassword), User.gen_UID()))
+
+    @classmethod
+    def append_user(cls, user):
         if not os.path.exists(CSV_PATH):
             print("no .csv found, check dir")
             return 
@@ -68,24 +74,32 @@ class User:
         with open(CSV_PATH, mode="a", newline="") as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=COLUMNS)
 
-            writer.writerow({"firstName":self.firstName, "lastName":self.lastName, "username":self.username, "password":self.password, "UID":self.UID})
-        
+            writer.writerow({"firstName":user.firstName, "lastName":user.lastName, "username":user.username, "password":user.password, "UID":user.UID})
+
         User.load_users() #refresh users list
-
-    def create_user(firstName, lastName, username, plainTextPassword):
-
-        self = User(firstName, lastName, username, User.password_encrypt(plainTextPassword), User.gen_UID())
-
-        self.append_user()
 
     @staticmethod
     def password_encrypt(password):
 
-        return bcrypt.hashpw(password.encode("utf-8"),bcrypt.gensalt())
+        return bcrypt.hashpw(password.encode("utf-8"),bcrypt.gensalt()).decode("utf-8") #hash, decode to str for csv
 
     @staticmethod
     def password_check(entered, password):
-        if bcrypt.checkpw(entered, password):
+        if bcrypt.checkpw(entered.encode("utf-8"), password.encode("utf-8")):
             return True
         else:
             return False
+        
+    @staticmethod
+    def login(username, password):
+        User.load_users()
+
+        for user in User.users:
+            if user.username == username:
+                if User.password_check(password, user.password):
+                    print("login success")
+                    User.current = user
+                else:
+                    print("incorrect password")
+
+        print("username not found")

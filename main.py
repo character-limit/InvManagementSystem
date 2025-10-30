@@ -33,5 +33,14 @@ def main():
         input ("password: ")
     )
 
+    print("yes")
+
+    print("LOGIN")
+
+    username = input("username: ")
+    password = input("password: ")
+
+    User.login(username, password)
+
 if __name__ == "__main__":
     main()

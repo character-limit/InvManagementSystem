@@ -1,5 +1,3 @@
 firstName,lastName,username,password,UID
-test,test,test,b'$2b$12$ixZ6I2JOg5D6UEHmd0fyPu2acpvPiqxGCr0x/SxY9sgKti0wC68xu',0001
-test,test,test,b'$2b$12$wf.VygfZpG7JpHFgGi9oO.ZneuKI4oE6K.Y39l505OnOLIGFUzQlm',0002
-test,test,test,b'$2b$12$wrkthKyPQZOVV0Qf/vTU6.3Lr7LcnLqh2s1lI6bZmgpoNNZecauTK',0003
-test,test,test,b'$2b$12$MpfSTJ0sR2PPWjA9ZxUvv.1thhKihm55YEgzF9VOn7FabUNn7J.4C',0004
+john,does,johnnyboy12,b'$2b$12$aXkJUguM9mA95rm.zEUjjuBTuhm2dmhluU1Znjnie6fHHPWNPj8He',0001
+luke,kelle,luke,$2b$12$DvZtawt/OQG6cnKJz9CoqONjWetJTx1QcIJJkD7ierwWm/t1M6wu.,0002
