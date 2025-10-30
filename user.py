@@ -5,6 +5,8 @@ COLUMNS = ["firstName", "lastName", "username", "password", "UID"] # fields for 
 
 class User:
 
+    users = [] #list of all user accs
+
     def __init__(self, firstName, lastName, username, password, UID):
         self.firstName = firstName
         self.lastName = lastName
@@ -17,43 +19,43 @@ class User:
     
     @classmethod
     def load_users(cls):
-        users = [] #init return
+
+        cls.users = []
 
         if not os.path.exists(CSV_PATH):
             print("no .csv found, check dir")
-            return users # catch if no file.
+            return
 
         #read file, add each item to array of item obj
         with open(CSV_PATH, newline = "") as csvfile:
             reader = csv.DictReader(csvfile)
 
             for tempItem in reader:
-                users.append(cls(**tempItem))
+                cls.users.append(cls(**tempItem))
 
-        return users
-    
+
     @classmethod
-    def write_users(cls, users):
+    def write_users(cls):
         if not os.path.exists(CSV_PATH):
             print("no .csv found, check dir")
-            return users # catch if no file.
+            return
 
         with open(CSV_PATH, mode = "w", newline = "") as csvfile: #write whole file, easier for edits.
             writer = csv.DictWriter(csvfile, fieldnames=COLUMNS)
             writer.writeheader()
 
-            for item in users:
+            for item in cls.users:
                 writer.writerow({"firstName":item.firstName, "lastName":item.lastName, "username":item.username, "password":item.password, "UID":item.UID})
         print("write success")
 
     @classmethod
     def gen_UID(cls):
-        users = cls.load_users()
+        cls.load_users()
 
-        if not users:
+        if not cls.users:
             return "0001" #catch empty list
         
-        temp = int(users[-1].UID) +1 #get last uid +=1
+        temp = int(cls.users[-1].UID) +1 #get last uid +=1
         uid = str(temp).zfill(4) #convert int to str with leading 0 for storage
 
         return uid
@@ -68,15 +70,17 @@ class User:
 
             writer.writerow({"firstName":self.firstName, "lastName":self.lastName, "username":self.username, "password":self.password, "UID":self.UID})
         
+        User.load_users() #refresh users list
+
     def create_user(self, firstName, lastName, username, plainTextPassword):
-        
+
         self.firstName = firstName
         self.lastName = lastName
         self.username = username
         self.password = self.password_encrypt(plainTextPassword)
-        self.UID = self.genUID()
+        self.UID = User.gen_UID()
 
-        self.append_user(self)
+        self.append_user()
 
     @staticmethod
     def password_encrypt(password):
