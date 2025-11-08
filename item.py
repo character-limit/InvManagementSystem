@@ -43,3 +43,20 @@ class Item:
 
             for item in items:
                 writer.writerow({"name":item.name, "quantity":item.quantity, "location":item.location, "lastModifiedUID":item.lastModifiedUID, "lastModifiedDate":item.lastModifiedDate})
+
+    @classmethod
+    def create_item(cls, name, quantity, location, lastModifiedUID, lastModifiedDate):
+        cls.append_item(Item(name, quantity, location, lastModifiedUID, lastModifiedDate))
+
+    @classmethod
+    def append_item(cls, item):
+        if not os.path.exists(CSV_PATH):
+            print("no .csv found, check dir")
+            return 
+        
+        with open(CSV_PATH, mode="a", newline="") as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=COLUMNS)
+
+            writer.writerow({"name":item.name, "quantity":item.quantity, "location":item.location, "lastModifiedUID":item.lastModifiedUID, "lastModifiedDate":item.lastModifiedDate})
+
+        Item.load_items() #refresh items list

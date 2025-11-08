@@ -189,8 +189,21 @@ def edit_table_page():
     else:
         edit_table_page()
 
+##ADD VALIDATION!!
 def add_item_page():
+    #Page to input item name to be Added.
+    os.system('cls' if os.name == 'nt' else 'clear')
     print("=== Add Item ===\n")
+
+    name = input("Item Name: ")
+    quantity = input("Quantity: ")
+    location = input("Location: ")
+    lastModifiedUID = User.current.UID
+    lastModifiedDate = datetime.now().strftime("%d/%m/%Y %H:%M")
+
+    Item.create_item(name, quantity, location, lastModifiedUID, lastModifiedDate)
+
+    inventory_page(1)
 
 def remove_item_page():
     #Page to input item name to be removed.
@@ -210,6 +223,7 @@ def remove_item_page():
 def edit_item_page():
     print("=== Edit Item ===\n")
 
+##UNFINISEHD
 def item_selector(items): # Display items list parameter in table format with number to select specific item.
     os.system('cls' if os.name == 'nt' else 'clear')
     print("=== Select Item ===\n")
