@@ -124,6 +124,7 @@ def inventory_page(page):
         inventory_page(page)
 
 def print_table(page, items):
+    #Display all items in the list provided in param, and display in intervals of 15 according the the page no.
 
     lb = ((page)*15)-15 #get lower bound for items to display on page
     ub = lb +15         #get upper bound for items to display on page
@@ -135,10 +136,13 @@ def print_table(page, items):
 
     print(f"[Page: {page} of {((len(items)-1)//15)+1}]")
 
-def inventory_search_page(page):
-    os.system('cls' if os.name == 'nt' else 'clear')
-    print("=== Inventory Search ===\n")
-    query = input("Enter search term: ").lower() #case insensitive
+def inventory_search_page(page, query=None):#params: query optional, its for recursive calls when incrementing pages..ect
+    #Print the page to request a search term, and then display results.
+
+    if not query: 
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print("=== Inventory Search ===\n")
+        query = input("Enter search term: ").lower() #case insensitive
 
     items = Item.load_items()
     results = [item for item in items if query in item.name.lower() or query in item.location.lower()] #check against name and loci
@@ -147,27 +151,23 @@ def inventory_search_page(page):
     print(f"=== Search: '{query}' ===\n")
 
     if results:
-        print_table(page, results)
+        print_table(page, results) #print table, of results, according to page no
 
-        choice = input("\n 1: Back to Inventory   2: Next Page   3: Previous Page   4: Edit Search\nOption: ")
+        choice = input("\n 1: Back to Inventory   2: Next Page   3: Previous Page   4: New Search\nOption: ") 
 
         if choice == "1":
-            inventory_page(1)
-        elif choice == "2":
-            os.system('cls' if os.name == 'nt' else 'clear')
-            print(f"=== Search: '{query}' ===\n")
-            print_table((page+1 if (page*15)<len(results) else page), results)
-            choice = input("\n 1: Back to Inventory   2: Next Page   3: Previous Page   4: Edit Search\nOption: ")
-        elif choice == "3":
-            os.system('cls' if os.name == 'nt' else 'clear')
-            print(f"=== Search: '{query}' ===\n")
-            print_table((page-1 if page >1 else 1), results)
-            choice = input("\n 1: Back to Inventory   2: Next Page   3: Previous Page   4: Edit Search\nOption: ")
-        elif choice == "4":
-            inventory_search_page(1) 
-    else:
-        print("No items found matching your search.")
+            inventory_page(1) #ret to inv page
 
+        elif choice == "2": #inc page
+            inventory_search_page(page+1 if (page*15)<len(results) else page, query)
+
+        elif choice == "3": #dec page
+            inventory_search_page(page-1 if page >1 else 1, query)
+
+        elif choice == "4":
+            inventory_search_page(1)
+        
+    print("No items found matching your search.")
     input("\nPress Enter to return to Inventory...")
     inventory_page(1)
 
