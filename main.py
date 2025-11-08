@@ -3,8 +3,6 @@ from datetime import datetime
 from item import Item
 from user import User
 
-print("hello")
-
 def main():
     """ items = Item.load_items()
 
@@ -101,6 +99,8 @@ def menu_page():
         menu_page()
 
 def inventory_page(page):
+    #Display inventory page, allow option seleciton adn page icnrementation/decremebnt
+
     items = Item.load_items()   #reload items 
     os.system('cls' if os.name == 'nt' else 'clear')
     print("=== Inventory ===\n\n")
@@ -131,6 +131,7 @@ def print_table(page, items):
 
     print(f'{"Name":<40} {"Quantity":<15} {"Location":<25} {"Last Modified By":<25} {"Last Modified ":<25}')#header
     print("-"*130)#separator
+
     for i in items[lb:ub]:  #slice items according to above
         print(f"{i.name:<40} {i.quantity:<15} {i.location:<25} {User.find_user(i.lastModifiedUID).firstName:<25} {i.lastModifiedDate:<25}")
 
@@ -192,6 +193,7 @@ def add_item_page():
     print("=== Add Item ===\n")
 
 def remove_item_page():
+    #Page to input item name to be removed.
     os.system('cls' if os.name == 'nt' else 'clear')
     print("=== Remove Item ===\n")
 
@@ -202,18 +204,19 @@ def remove_item_page():
     items = Item.load_items()
     results = [item for item in items if query in item.name.lower() or query in item.location.lower()] #check against name and loci
 
-    item_selector(results)
+    item_selector(results) # load table, with numbered input to select a specific item.
     #select from results using item selector
 
 def edit_item_page():
     print("=== Edit Item ===\n")
 
-def item_selector(items):
+def item_selector(items): # Display items list parameter in table format with number to select specific item.
     os.system('cls' if os.name == 'nt' else 'clear')
     print("=== Select Item ===\n")
 
     print(f'       {"Name":<40} {"Quantity":<15} {"Location":<25} {"Last Modified By":<25} {"Last Modified ":<25}')#header
-    print("-"*130)#separator
+    print("-"*130) #separator
+
     j = 0
     for i in items:
         print(f"[{j}]   {i.name:<40} {i.quantity:<15} {i.location:<25} {User.find_user(i.lastModifiedUID).firstName:<25} {i.lastModifiedDate:<25}")
@@ -224,8 +227,16 @@ def item_selector(items):
     if choice == 'b':
         return
 
+    if not choice.isdigit() or int(choice) < 0 or int(choice) >= len(items): #validation that selection is displayed.
+        item_selector(items) #reload if invalid
+        return
+    
+    #if item is valid then return selected item
     selected_item = items[int(choice)]
-    print(f"Selected item: {selected_item}")
+
+    print(f"Selected item: {selected_item}") #debug print
+
+    return selected_item
 
 
 if __name__ == "__main__":
