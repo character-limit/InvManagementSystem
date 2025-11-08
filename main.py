@@ -217,8 +217,20 @@ def remove_item_page():
     items = Item.load_items()
     results = [item for item in items if query in item.name.lower() or query in item.location.lower()] #check against name and loci
 
-    item_selector(results) # load table, with numbered input to select a specific item.
-    #select from results using item selector
+    if not results: #None found, ret
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print("No items found matching your search.")
+        input("\nPress Enter to return to Inventory...")
+        inventory_page(1)
+
+    item = item_selector(results) #load table, with numbered input to select a specific item.
+
+    if not item: #go back if asked
+        inventory_page(1)
+    
+    Item.remove_item(item)
+    inventory_page(1)
+
 
 def edit_item_page():
     print("=== Edit Item ===\n")

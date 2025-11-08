@@ -60,3 +60,15 @@ class Item:
             writer.writerow({"name":item.name, "quantity":item.quantity, "location":item.location, "lastModifiedUID":item.lastModifiedUID, "lastModifiedDate":item.lastModifiedDate})
 
         Item.load_items() #refresh items list
+
+    @classmethod 
+    def remove_item(cls, item):
+        items = cls.load_items() #load current items
+
+        #update items list, exluding removed item
+        items = [i for i in items if not (i.name == item.name and i.location == item.location and i.lastModifiedDate == item.lastModifiedDate)]
+
+        #Re-wrute
+        cls.write_items(items)
+
+        Item.load_items() #refresh items list
