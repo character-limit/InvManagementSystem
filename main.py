@@ -227,7 +227,7 @@ def item_selector(items): # Display items list parameter in table format with nu
     if choice == 'b':
         return
 
-    if not choice.isdigit() or int(choice) < 0 or int(choice) >= len(items): #validation that selection is displayed.
+    if not choice.isdigit() or int(choice) < 0 or int(choice) >= len(items): #validation that selection is displayed
         item_selector(items) #reload if invalid
         return
     
