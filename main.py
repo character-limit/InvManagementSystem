@@ -233,9 +233,63 @@ def remove_item_page():
 
 
 def edit_item_page():
+    #Page to input item name to be edited.
+    os.system('cls' if os.name == 'nt' else 'clear')
     print("=== Edit Item ===\n")
 
-##UNFINISEHD
+    #search for items with name 
+    query = input("\n\nSearch for item name: ").lower() #case insensitive
+
+    items = Item.load_items()
+    results = [item for item in items if query in item.name.lower() or query in item.location.lower()] #check against name and loci
+
+    if not results: #None found, ret
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print("No items found matching your search.")
+        input("\nPress Enter to return to Inventory...")
+        inventory_page(1)
+
+    item = item_selector(results) #load table, with numbered input to select a specific item.
+
+    if not item: #go back if asked
+        inventory_page(1)
+
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+    print("Name: ", item.name)
+    print("Quantity: ", item.quantity)
+    print("Location: ", item.location)
+    print("Last Modified By: ", User.find_user(item.lastModifiedUID).firstName)
+    print("Last Modified Date: ", item.lastModifiedDate)
+
+    print("\n\n1: Name   2: Quantity   3: Location   4: Back To Inventory")
+    choice = input("\nSelect field to edit: ")
+
+    if choice == "1":
+        value = input("Enter new name: ")
+        item.name = value
+    elif choice == "2":
+        value = input("Enter new quantity: ")
+        item.quantity = value
+    elif choice == "3":
+        value = input("Enter new location: ")
+        item.location = value
+    elif choice == "4":
+        inventory_page(1)
+    else:
+        input("Invalid choice. Press Enter To Go Back To Inventory...")
+        inventory_page(1)
+
+    Item.remove_item(item) #remove old
+
+    item.lastModifiedUID = User.current.UID
+    item.lastModifiedDate = datetime.now().strftime("%d/%m/%Y %H:%M")
+
+    Item.append_item(item) #add edited
+
+    inventory_page(1)
+
+
 def item_selector(items): # Display items list parameter in table format with number to select specific item.
     os.system('cls' if os.name == 'nt' else 'clear')
     print("=== Select Item ===\n")
@@ -259,8 +313,6 @@ def item_selector(items): # Display items list parameter in table format with nu
     
     #if item is valid then return selected item
     selected_item = items[int(choice)]
-
-    print(f"Selected item: {selected_item}") #debug print
 
     return selected_item
 
