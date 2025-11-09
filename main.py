@@ -60,8 +60,8 @@ def title_page():
 def login_page():
     os.system('cls' if os.name == 'nt' else 'clear')
     print("=== Login ===")
-    username = input("Username: ")
-    password = input("Password: ")
+    username = input("Username: ").lower()
+    password = input("Password: ").lower()
 
     
 
@@ -72,16 +72,45 @@ def login_page():
         input("Press Enter to continue...")
         login_page()
 
-def create_user_page(): ##ADD VALIDATION!!
+def create_user_page():
     os.system('cls' if os.name == 'nt' else 'clear')
     print("=== Create Account ===")
-    firstName = input("First Name: ")
-    lastName = input("Last Name: ")
-    username = input("Username: ")
-    password = input("Password: ")
+
+    while True:
+        firstName = input("First Name: ").capitalize()
+        if len(firstName) < 2 or len(firstName) > 30 or not all(i.isalpha() for i in firstName): #check length and string content
+            os.system('cls' if os.name == 'nt' else 'clear') #clear display
+            print("Invalid input.\n\n") #ask again
+        else:
+            break
+    
+    while True:
+        lastName = input("Last Name: ").capitalize()
+        if len(lastName) < 2 or len(lastName) > 30 or not all(i.isalpha() for i in lastName): #check length and string content
+            os.system('cls' if os.name == 'nt' else 'clear') #clear display
+            print("Invalid input.\n\n") #ask again
+        else:
+            break
+    
+    while True:
+        username = input("Username: ").lower()
+        if len(username) < 2 or len(username) > 30 or not all(i.isalnum() for i in username): #check length and string content
+            os.system('cls' if os.name == 'nt' else 'clear') #clear display
+            print("Invalid input - username must be alphanumeric\n\n") #ask again
+        else:
+            break
+
+    while True:
+        password = input("Password: ")
+        if len(password) < 8 or len(password) > 30:
+            os.system('cls' if os.name == 'nt' else 'clear')
+            print("Invalid input - password must be 8-30 characters for security\n\n")
+        else:
+            break
 
     User.create_user(firstName, lastName, username, password)
     title_page()
+
 
 def menu_page():
     os.system('cls' if os.name == 'nt' else 'clear')
