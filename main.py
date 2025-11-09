@@ -61,7 +61,7 @@ def login_page():
     os.system('cls' if os.name == 'nt' else 'clear')
     print("=== Login ===")
     username = input("Username: ").lower()
-    password = input("Password: ").lower()
+    password = input("Password: ")
 
     
 
@@ -218,15 +218,14 @@ def edit_table_page():
     else:
         edit_table_page()
 
-##ADD VALIDATION!!
 def add_item_page():
     #Page to input item name to be Added.
     os.system('cls' if os.name == 'nt' else 'clear')
     print("=== Add Item ===\n")
 
-    name = input("Item Name: ")
-    quantity = input("Quantity: ")
-    location = input("Location: ")
+    name = ask_validate_name_input()   #function to validate name inputs for ITEM
+    quantity = ask_validate_quantity_input()   #function to validate quantity inputs
+    location = ask_validate_location_input()   #function to validate location inputs
     lastModifiedUID = User.current.UID
     lastModifiedDate = datetime.now().strftime("%d/%m/%Y %H:%M")
 
