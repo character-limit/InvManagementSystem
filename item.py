@@ -17,11 +17,10 @@ class Item:
     @classmethod
     def load_items(cls):
         items = [] #init return
-
         if not os.path.exists(CSV_PATH):
             print("no .csv found, check dir")
             return items # catch if no file.
-
+        
         #read file, add each item to array of item obj
         with open(CSV_PATH, newline = "") as csvfile:
             reader = csv.DictReader(csvfile)
@@ -31,20 +30,28 @@ class Item:
 
         return items
     
+    #Function to write inputted items list to csv file
     @classmethod
     def write_items(cls, items):
+        #Check file path exists, if not, output error
         if not os.path.exists(CSV_PATH):
             print("no .csv found, check dir")
             return
-
+        
         with open(CSV_PATH, mode = "w", newline = "") as csvfile:
-            writer = csv.DictWriter(csvfile, fieldnames=COLUMNS)
-            writer.writeheader()
+            writer = csv.DictWriter(csvfile, fieldnames=COLUMNS)    #Write whole file, easier for edits.
+            writer.writeheader() #Re-write header as writing whole file.
 
-            for item in items:
-                writer.writerow({"name":item.name, "quantity":item.quantity, "location":item.location, "lastModifiedUID":item.lastModifiedUID, "lastModifiedDate":item.lastModifiedDate})
+            for item in items:  #iterate through items, write each to the file.
+                writer.writerow({
+                    "name":item.name, 
+                    "quantity":item.quantity, 
+                    "location":item.location, 
+                    "lastModifiedUID":item.lastModifiedUID, 
+                    "lastModifiedDate":item.lastModifiedDate
+                    })
 
-    @classmethod
+    @classmethod    #Function to create a new item and then append it to csv.
     def create_item(cls, name, quantity, location, lastModifiedUID, lastModifiedDate):
         cls.append_item(Item(name, quantity, location, lastModifiedUID, lastModifiedDate))
 
@@ -52,11 +59,11 @@ class Item:
     def append_item(cls, item):
         if not os.path.exists(CSV_PATH):
             print("no .csv found, check dir")
-            return 
+            return #catch if no file.
         
-        with open(CSV_PATH, mode="a", newline="") as csvfile:
+        with open(CSV_PATH, mode="a", newline="") as csvfile: #open in append mode
             writer = csv.DictWriter(csvfile, fieldnames=COLUMNS)
-
+            #add only new line, dont re-write fully.
             writer.writerow({"name":item.name, "quantity":item.quantity, "location":item.location, "lastModifiedUID":item.lastModifiedUID, "lastModifiedDate":item.lastModifiedDate})
 
         Item.load_items() #refresh items list
