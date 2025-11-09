@@ -344,7 +344,7 @@ def item_selector(items): # Display items list parameter in table format with nu
 
 def ask_validate_name_input():
     #Function to validate name inputs for ITEM
-    value = ""
+    value = input("Enter name: ") #ask again
 
     while True: #continue until correct
         if len(value) < 2 or len(value) > 30 or not all(i.isalpha() or i.isspace() for i in value): #check length and string content
@@ -357,10 +357,9 @@ def ask_validate_name_input():
 
 def ask_validate_quantity_input():
     #Function to validate quantity input
-    value = ""
+    value = input("Enter quantity: ")
 
     while True: #continue until correct
-        value = input("Enter quantity: ")
         if not value.isdigit() or int(value) < 0:
             os.system('cls' if os.name == 'nt' else 'clear') #clear display
             value = input("Invalid input.\n\nEnter quantity: ") #ask again
@@ -371,7 +370,7 @@ def ask_validate_quantity_input():
 
 def ask_validate_location_input():
     #Function to validate location input
-    value = ""  
+    value = input("Enter location: ") #ask again
     
     while True: #continue until correct
         if len(value) < 2 or len(value) > 30 or not all(i.isalnum() or i.isspace() for i in value): #check length and string content
