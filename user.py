@@ -1,6 +1,6 @@
 import csv, os, bcrypt
 
-CSV_PATH = "users.csv"
+CSV_PATH = os.path.join(os.path.dirname(__file__), "users.csv")
 COLUMNS = ["firstName", "lastName", "username", "password", "UID"] # fields for item obj in csv file
 
 class User:

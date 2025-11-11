@@ -1,6 +1,6 @@
 import csv, os
 
-CSV_PATH = "inventory.csv"
+CSV_PATH = os.path.join(os.path.dirname(__file__), "inventory.csv")
 COLUMNS = ["name", "quantity", "location", "lastModifiedUID", "lastModifiedDate"] # fields for item obj in csv file
 
 class Item:
