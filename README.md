@@ -10,5 +10,9 @@ To set up the program:
 Editing the csv data directly:
 To edit the csv files, simply open them, and copy paste new data in.
 
+CSV not found error:
+Check the directory stated at the top of user.py or item.py respectively.
 
+
+If the formatting is off, please ensure the command window is a large enough size.
 
